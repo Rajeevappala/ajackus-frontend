@@ -1,0 +1,13 @@
+.NavbarContainer{
+    background-color: rgb(224, 68, 68);
+    height: 8vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.heading{
+    margin: 2px;
+}
