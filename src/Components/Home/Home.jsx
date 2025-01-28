@@ -1,6 +1,7 @@
 import React , {useState , useEffect} from 'react'
-import Userist from "../UserList/Userist"
-import "./home.css"
+import Userist from "../UserList/Userist";
+import "./home.css";
+import {ColorRing} from "react-loader-spinner";
 import axios from "axios"
 
 const Home = () => {
@@ -15,18 +16,23 @@ const Home = () => {
     })
 
     const [students , setStudents] = useState([])
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchStudentsData();
     } , []);
 
     const fetchStudentsData = async() => {
+        setLoading(true);
         try {
             const response = await axios.get("https://ajackus-backend-fbps.onrender.com/users");
             setStudents(response.data)
             console.log(response.data)
         } catch (error) {
-            
+            console.error(error);
+        }
+        finally{
+            setLoading(false);
         }
     }
 
@@ -100,15 +106,26 @@ const Home = () => {
           </form>
           </div>
       </div>
-    
+      <h1 className='user-details-heading'>User Details</h1>
         <div className='listContainer'>
-            <ul className='ulContainer'>
-                {
-                    students.map(eachEle => (
-                        <Userist userDetails = {eachEle} key = {eachEle._id} onDelete = {deleteUser}/>
-                    ))
-                }
-            </ul>
+            {
+                loading?(<div className='loading-container'><ColorRing
+                    visible={true}
+                    height="80"
+                    width="80"
+                    ariaLabel="color-ring-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="color-ring-wrapper"
+                    colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                    /></div>) : (students.length === 0 ? (<div className='loading-container'><p>No users found. Please add some users</p></div>) : <ul className='ulContainer'>
+                    {
+                        students.map(eachEle => (
+                            <Userist userDetails = {eachEle} key = {eachEle._id} onDelete = {deleteUser}/>
+                        ))
+                    }
+                </ul>)
+            }
+            
         </div>
    
     </div>
